@@ -1,0 +1,11 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+db-engine.log
+.idea
+
+# build artifacts
+dbt_frostlake.egg-info/
+build/
+dist/

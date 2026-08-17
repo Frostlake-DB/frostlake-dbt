@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbt-frostlake"
+# Kept in step with dbt/adapters/frostlake/__version__.py, which dbt reports at runtime.
+version = "0.2.0"
+description = "dbt adapter for Frostlake"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "MLorek" }]
+keywords = ["frostlake", "dbt", "adapter", "elt", "analytics", "sql"]
+dependencies = [
+    "dbt-core>=1.10",
+    "dbt-adapters>=1.24",
+    "dbt-common>=1.10",
+    "agate",
+    "frostlake-connector>=0.2.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://frostlake.dev"
+Source = "https://github.com/Frostlake-DB/frostlake-dbt"
+Issues = "https://github.com/Frostlake-DB/frostlake-dbt/issues"
+
+[tool.setuptools.packages.find]
+include = ["dbt", "dbt.*"]
+
+[tool.setuptools.package-data]
+"dbt.include.frostlake" = ["dbt_project.yml", "profile_template.yml", "macros/**/*.sql"]

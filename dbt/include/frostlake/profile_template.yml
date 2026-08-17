@@ -1,0 +1,16 @@
+fixed:
+  type: frostlake
+prompts:
+  host:
+    default: localhost
+  port:
+    default: 18082
+    type: int
+  database:
+    default: demo_db
+  schema:
+    default: public
+  threads:
+    hint: "1 or more"
+    type: int
+    default: 1
