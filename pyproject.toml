@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dbt-frostlake"
 # Kept in step with dbt/adapters/frostlake/__version__.py, which dbt reports at runtime.
-version = "0.2.0"
+version = "0.2.1"
 description = "dbt adapter for Frostlake"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -18,7 +18,7 @@ dependencies = [
     "dbt-adapters>=1.24",
     "dbt-common>=1.10",
     "agate",
-    "frostlake-connector>=0.2.0",
+    "frostlake-connector>=0.2.1",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

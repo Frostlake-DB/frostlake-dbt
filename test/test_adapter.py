@@ -49,14 +49,19 @@ def setUpModule():
     with socket.socket() as probe:
         probe.bind(("127.0.0.1", 0))
         port = probe.getsockname()[1]
-    server = subprocess.Popen(
-        [java, "-cp", classpath, "dev.frostlake.http.DatabaseHttpServer", str(port)],
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-    )
+    # The engine's output goes to a file, never to a pipe: a published jar configures no
+    # logging of its own, so it writes to stderr, and a pipe nobody drains stalls the
+    # engine once the OS buffer fills.
+    log_path = ROOT / "db-engine.log"
+    with open(log_path, "wb") as log:
+        server = subprocess.Popen(
+            [java, "-cp", classpath, "dev.frostlake.http.DatabaseHttpServer", str(port)],
+            stdout=log, stderr=subprocess.STDOUT,
+        )
     base = "http://127.0.0.1:%d" % port
     for _ in range(100):
         if server.poll() is not None:
-            output = server.communicate()[0].decode("utf-8", "replace")
+            output = log_path.read_text(errors="replace")
             raise AssertionError("the engine exited during startup:\n" + output[-2000:])
         try:
             with urllib.request.urlopen(base + "/api/health", timeout=2) as response:

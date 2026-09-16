@@ -2,7 +2,7 @@ venv/
 .venv/
 __pycache__/
 *.pyc
-db-engine.log
+*.log
 .idea
 
 # build artifacts
