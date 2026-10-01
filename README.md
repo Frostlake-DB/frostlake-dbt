@@ -40,11 +40,11 @@ over from another warehouse still loads, and ignored — the server has no login
 The engine is published to Maven Central, so no build is required:
 
 ```bash
-mvn dependency:get -Dartifact=dev.frostlake:frostlake-db:0.0.7
+mvn dependency:get -Dartifact=dev.frostlake:frostlake-db:0.2.0
 java -cp "<frostlake-db jar>:<its runtime deps>" dev.frostlake.http.DatabaseHttpServer 18082
 ```
 
-Requires **JDK 17** and a Frostlake engine **0.0.7 or newer**. Create the target database
+Requires **JDK 17** and a Frostlake engine **0.2.0 or newer**. Create the target database
 once it is up:
 
 ```sql
@@ -86,6 +86,14 @@ surface and its `unique_field` connection key, and `open()` against a live serve
 handle usability, database/schema context, query tags, and reuse of an already-open
 connection. The plugin and credential tests need no server; the connection tests skip
 without `FROSTLAKE_CLASSPATH`.
+
+Set `FL_CORPUS` to the engine's testkit directory (an absolute path) and the same run also
+replays the engine's language-neutral SQL corpus through the adapter's `open()`
+(`testkit_runner.py`); without it, that test skips:
+
+```sh
+FL_CORPUS=/path/to/frostlake/engine/src/test/resources/testkit python3 test/test_adapter.py
+```
 
 ## Still to do
 

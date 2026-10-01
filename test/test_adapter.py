@@ -7,6 +7,7 @@ tests boot a real DatabaseHttpServer from FROSTLAKE_CLASSPATH and skip without i
 """
 
 import atexit
+import importlib.util
 import os
 import pathlib
 import re
@@ -480,6 +481,27 @@ class ConnectionTest(unittest.TestCase):
                       [frostlake_connector.errors.OperationalError])
         creds = FrostlakeCredentials(database="d", schema="s")
         self.assertGreaterEqual(creds.connect_retries, 0)
+
+
+@unittest.skipUnless(os.environ.get("FL_CORPUS"),
+                     "set FL_CORPUS to frostlake's engine/src/test/resources/testkit"
+                     " to replay the testkit corpus")
+class TestkitCorpusTest(unittest.TestCase):
+    """The engine's testkit corpus, replayed through open() by testkit_runner.py."""
+
+    def test_corpus_replays_without_failures(self):
+        # Loaded by path: the sibling checkouts ahead of ROOT on sys.path carry runners of
+        # the same name.
+        spec = importlib.util.spec_from_file_location("testkit_runner",
+                                                      ROOT / "testkit_runner.py")
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        runner.suites_directory()   # an FL_CORPUS without suites fails here, before any engine
+        if not (os.environ.get("FROSTLAKE_CLASSPATH") or os.environ.get("FROSTLAKE_URL")):
+            self.skipTest("no engine (set FROSTLAKE_CLASSPATH or FROSTLAKE_URL)")
+        # The runner prints its tally and first failures, and returns 1 on a failed or
+        # errored case.
+        self.assertEqual(0, runner.main(["--backend", "dbt"]))
 
 
 if __name__ == "__main__":
